@@ -10,7 +10,8 @@ namespace DotnetEF.Models
         }
 
         public DbSet<Jogo> Jogos { get; set; }
-
         public DbSet<Categoria> Categorias { get; set; }
+        public DbSet<Time> Times { get; set; }
+        public DbSet<TimePessoa> TimesPessoas { get; set; }
     }
 }
