@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DotnetEF.Models
 {
     public class TimePessoa
     {
+        [Key]
         public long Id { get; set; }
 
         public long TimeId { get; set; }
