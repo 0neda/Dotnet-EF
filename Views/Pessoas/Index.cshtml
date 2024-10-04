@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DotnetEF.Models.Jogo>
+﻿@model IEnumerable<AulaEntityFramework.Models.Pessoa>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,16 +16,7 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Value)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AgeRating)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Categoria)
+                @Html.DisplayNameFor(model => model.BirthDate)
             </th>
             <th></th>
         </tr>
@@ -37,16 +28,7 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Value)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AgeRating)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Categoria.Id)
+                @Html.DisplayFor(modelItem => item.BirthDate)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

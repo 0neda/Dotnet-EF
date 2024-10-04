@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DotnetEF.Models
+namespace AulaEntityFramework.Models
 {
     public class TimePessoa
     {

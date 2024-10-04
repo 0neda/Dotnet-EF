@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace DotnetEF.Migrations
+namespace AulaEntityFramework.Migrations
 {
     /// <inheritdoc />
-    public partial class TimePessoas : Migration
+    public partial class Inicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

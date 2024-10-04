@@ -1,4 +1,4 @@
-﻿namespace DotnetEF.Models
+﻿namespace AulaEntityFramework.Models
 {
     public class Time
     {

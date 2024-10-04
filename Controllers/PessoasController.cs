@@ -5,94 +5,94 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DotnetEF.Models;
+using AulaEntityFramework.Models;
+using AulaEntityFramework.Repositories;
 
-namespace DotnetEF.Controllers
+namespace AulaEntityFramework.Controllers
 {
-    public class JogosController : Controller
+    public class PessoasController : Controller
     {
         private readonly MyDbContext _context;
+        private IPessoaRepository _pessoaRepository;
 
-        public JogosController(MyDbContext context)
+        public PessoasController(MyDbContext context, IPessoaRepository pessoaRepository)
         {
             _context = context;
+            _pessoaRepository = pessoaRepository;
         }
 
-        // GET: Jogos
-        public async Task<IActionResult> Index()
+        // GET: Pessoas
+        public IActionResult Index()
         {
-            var myDbContext = _context.Jogos.Include(j => j.Categoria);
-            return View(await myDbContext.ToListAsync());
+            return View(
+                _pessoaRepository.GetAll()
+            );
         }
 
-        // GET: Jogos/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: Pessoas/Details/5
+        public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var jogo = await _context.Jogos
-                .Include(j => j.Categoria)
+            var pessoa = await _context.Pessoa
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (jogo == null)
+            if (pessoa == null)
             {
                 return NotFound();
             }
 
-            return View(jogo);
+            return View(pessoa);
         }
 
-        // GET: Jogos/Create
+        // GET: Pessoas/Create
         public IActionResult Create()
         {
-            ViewData["CategoriaID"] = new SelectList(_context.Categorias, "Id", "Id");
             return View();
         }
 
-        // POST: Jogos/Create
+        // POST: Pessoas/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Value,Description,AgeRating,CategoriaID")] Jogo jogo)
+        public async Task<IActionResult> Create([Bind("Id,Name,BirthDate")] Pessoa pessoa)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(jogo);
+                _context.Add(pessoa);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoriaID"] = new SelectList(_context.Categorias, "Id", "Id", jogo.CategoriaID);
-            return View(jogo);
+            return View(pessoa);
         }
 
-        // GET: Jogos/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: Pessoas/Edit/5
+        public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var jogo = await _context.Jogos.FindAsync(id);
-            if (jogo == null)
+            var pessoa = await _context.Pessoa.FindAsync(id);
+            if (pessoa == null)
             {
                 return NotFound();
             }
-            ViewData["CategoriaID"] = new SelectList(_context.Categorias, "Id", "Id", jogo.CategoriaID);
-            return View(jogo);
+            return View(pessoa);
         }
 
-        // POST: Jogos/Edit/5
+        // POST: Pessoas/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Value,Description,AgeRating,CategoriaID")] Jogo jogo)
+        public async Task<IActionResult> Edit(long id, [Bind("Id,Name,BirthDate")] Pessoa pessoa)
         {
-            if (id != jogo.Id)
+            if (id != pessoa.Id)
             {
                 return NotFound();
             }
@@ -101,12 +101,12 @@ namespace DotnetEF.Controllers
             {
                 try
                 {
-                    _context.Update(jogo);
+                    _context.Update(pessoa);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!JogoExists(jogo.Id))
+                    if (!PessoaExists(pessoa.Id))
                     {
                         return NotFound();
                     }
@@ -117,47 +117,45 @@ namespace DotnetEF.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoriaID"] = new SelectList(_context.Categorias, "Id", "Id", jogo.CategoriaID);
-            return View(jogo);
+            return View(pessoa);
         }
 
-        // GET: Jogos/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // GET: Pessoas/Delete/5
+        public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var jogo = await _context.Jogos
-                .Include(j => j.Categoria)
+            var pessoa = await _context.Pessoa
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (jogo == null)
+            if (pessoa == null)
             {
                 return NotFound();
             }
 
-            return View(jogo);
+            return View(pessoa);
         }
 
-        // POST: Jogos/Delete/5
+        // POST: Pessoas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            var jogo = await _context.Jogos.FindAsync(id);
-            if (jogo != null)
+            var pessoa = await _context.Pessoa.FindAsync(id);
+            if (pessoa != null)
             {
-                _context.Jogos.Remove(jogo);
+                _context.Pessoa.Remove(pessoa);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool JogoExists(int id)
+        private bool PessoaExists(long id)
         {
-            return _context.Jogos.Any(e => e.Id == id);
+            return _context.Pessoa.Any(e => e.Id == id);
         }
     }
 }

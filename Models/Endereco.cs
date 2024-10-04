@@ -1,7 +1,6 @@
-﻿using DotnetEF.Models;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DotnetEF.Models
+namespace AulaEntityFramework.Models
 {
     public enum UF
     {

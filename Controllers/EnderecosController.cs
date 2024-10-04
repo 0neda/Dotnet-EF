@@ -1,93 +1,94 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DotnetEF.Models;
+using AulaEntityFramework.Models;
 
-namespace DotnetEF.Controllers
+namespace AulaEntityFramework.Controllers
 {
-    public class CategoriasController : Controller
+    public class EnderecosController : Controller
     {
         private readonly MyDbContext _context;
 
-        public CategoriasController(MyDbContext context)
+        public EnderecosController(MyDbContext context)
         {
             _context = context;
         }
 
-        // GET: Categorias
+        // GET: Enderecos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Categorias.ToListAsync());
+            var myDbContext = _context.Endereco.Include(e => e.Pessoa);
+            return View(await myDbContext.ToListAsync());
         }
 
-        // GET: Categorias/Details/5
-        public async Task<IActionResult> Details(long? id)
+        // GET: Enderecos/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var categoria = await _context.Categorias
+            var endereco = await _context.Endereco
+                .Include(e => e.Pessoa)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (categoria == null)
+            if (endereco == null)
             {
                 return NotFound();
             }
 
-            return View(categoria);
+            return View(endereco);
         }
 
-        // GET: Categorias/Create
+        // GET: Enderecos/Create
         public IActionResult Create()
         {
+            ViewData["PessoaId"] = new SelectList(_context.Pessoa, "Id", "Id");
             return View();
         }
 
-        // POST: Categorias/Create
+        // POST: Enderecos/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Categoria categoria)
+        public async Task<IActionResult> Create([Bind("Id,Rua,Numero,Bairro,Cidade,UF,Pais,CEP,PessoaId")] Endereco endereco)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(categoria);
+                _context.Add(endereco);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(categoria);
+            ViewData["PessoaId"] = new SelectList(_context.Pessoa, "Id", "Id", endereco.PessoaId);
+            return View(endereco);
         }
 
-        // GET: Categorias/Edit/5
-        public async Task<IActionResult> Edit(long? id)
+        // GET: Enderecos/Edit/5
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var categoria = await _context.Categorias.FindAsync(id);
-            if (categoria == null)
+            var endereco = await _context.Endereco.FindAsync(id);
+            if (endereco == null)
             {
                 return NotFound();
             }
-            return View(categoria);
+            ViewData["PessoaId"] = new SelectList(_context.Pessoa, "Id", "Id", endereco.PessoaId);
+            return View(endereco);
         }
 
-        // POST: Categorias/Edit/5
+        // POST: Enderecos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Name")] Categoria categoria)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Rua,Numero,Bairro,Cidade,UF,Pais,CEP,PessoaId")] Endereco endereco)
         {
-            if (id != categoria.Id)
+            if (id != endereco.Id)
             {
                 return NotFound();
             }
@@ -96,12 +97,12 @@ namespace DotnetEF.Controllers
             {
                 try
                 {
-                    _context.Update(categoria);
+                    _context.Update(endereco);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoriaExists(categoria.Id))
+                    if (!EnderecoExists(endereco.Id))
                     {
                         return NotFound();
                     }
@@ -112,45 +113,47 @@ namespace DotnetEF.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(categoria);
+            ViewData["PessoaId"] = new SelectList(_context.Pessoa, "Id", "Id", endereco.PessoaId);
+            return View(endereco);
         }
 
-        // GET: Categorias/Delete/5
-        public async Task<IActionResult> Delete(long? id)
+        // GET: Enderecos/Delete/5
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var categoria = await _context.Categorias
+            var endereco = await _context.Endereco
+                .Include(e => e.Pessoa)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (categoria == null)
+            if (endereco == null)
             {
                 return NotFound();
             }
 
-            return View(categoria);
+            return View(endereco);
         }
 
-        // POST: Categorias/Delete/5
+        // POST: Enderecos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(long id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var categoria = await _context.Categorias.FindAsync(id);
-            if (categoria != null)
+            var endereco = await _context.Endereco.FindAsync(id);
+            if (endereco != null)
             {
-                _context.Categorias.Remove(categoria);
+                _context.Endereco.Remove(endereco);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoriaExists(long id)
+        private bool EnderecoExists(int id)
         {
-            return _context.Categorias.Any(e => e.Id == id);
+            return _context.Endereco.Any(e => e.Id == id);
         }
     }
 }

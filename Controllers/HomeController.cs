@@ -1,8 +1,8 @@
-using DotnetEF.Models;
+using AulaEntityFramework.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace DotnetEF.Controllers
+namespace AulaEntityFramework.Controllers
 {
     public class HomeController : Controller
     {
