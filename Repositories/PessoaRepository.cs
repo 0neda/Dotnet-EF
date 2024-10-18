@@ -13,7 +13,7 @@ namespace AulaEntityFramework.Repositories
             _dbContext = context; // Injeção de dependência
         }
 
-        public Pessoa Delete(int id)
+        public Pessoa Delete(long id)
         {
             var pessoa = Get(id);
 
@@ -21,12 +21,12 @@ namespace AulaEntityFramework.Repositories
                 return null!;
 
             _dbContext.Pessoa.Remove(pessoa);
-            _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
 
             return pessoa;
         }
 
-        public Pessoa? Get(int id)
+        public Pessoa? Get(long id)
         {
             var pessoa = _dbContext
                 .Pessoa.Where(w => w.Id == id)
@@ -92,13 +92,15 @@ namespace AulaEntityFramework.Repositories
         public Pessoa Insert(Pessoa p)
         {
             _dbContext.Pessoa.Add(p);
-            _dbContext.SaveChangesAsync();
+            _dbContext.SaveChanges();
             return p;
         }
 
         public Pessoa Update(Pessoa p)
         {
-            throw new NotImplementedException();
+            _dbContext.Pessoa.Update(p);
+            _dbContext.SaveChanges();
+            return p;
         }
     }
 }
